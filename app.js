@@ -1,10 +1,36 @@
-const express = require("express");
+// const express = require("express");
+import express from "express";
+import cors from "cors";
+import "./loadEnvironment.mjs";
+import "express-async-errors";
+import admin from "./routes/admin.mjs"
+import hods from "./routes/hods.mjs"
+import lecturers from "./routes/lecturers.mjs"
+import students from "./routes/students.mjs"
+
 const app = express();
-const port = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3001;
+
+// Load environment variables
+import "./loadEnvironment.mjs";
+
+app.use(cors());
+app.use(express.json());
+
+app.use("/admin", admin);
+app.use("/hods", hods);
+app.use("/lecturers", lecturers);
+app.use("/students", students);
+
+// Global error handling
+app.use((err, _req, res, next) => {
+  res.status(500).send("Uh oh! An unexpected error occured.")
+})
+
 
 app.get("/", (req, res) => res.type('html').send(html));
 
-const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+const server = app.listen(PORT, () => console.log(`Server is running on port: ${PORT}`));
 
 server.keepAliveTimeout = 120 * 1000;
 server.headersTimeout = 120 * 1000;
