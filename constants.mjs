@@ -1,0 +1,6 @@
+export const COLLECTION_ADMINS = "admins"
+export const COLLECTION_LECTURERS = "lecturers"
+export const COLLECTION_COURSES = "courses"
+export const HOD = "hod"
+export const LECTURER = "lecturer"
+export const EXPIRED = "expired"

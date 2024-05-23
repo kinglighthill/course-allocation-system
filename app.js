@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import "./loadEnvironment.mjs";
 import "express-async-errors";
+import auth from "./routes/auth.mjs"
 import admin from "./routes/admin.mjs"
 import hods from "./routes/hods.mjs"
 import lecturers from "./routes/lecturers.mjs"
@@ -17,6 +18,7 @@ import "./loadEnvironment.mjs";
 app.use(cors());
 app.use(express.json());
 
+app.use("/auth", auth);
 app.use("/admin", admin);
 app.use("/hods", hods);
 app.use("/lecturers", lecturers);
