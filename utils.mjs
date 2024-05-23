@@ -4,7 +4,8 @@ import crypto from "crypto"
 import db from "./db/conn.mjs";
 import "./loadEnvironment.mjs";
 
-import { COLLECTION_ADMINS, COLLECTION_LECTURERS, EXPIRED } from "./constants.mjs";
+import { COLLECTION_ADMINS, COLLECTION_COURSES, COLLECTION_LECTURERS, EXPIRED } from "./constants.mjs";
+import { ObjectId } from "mongodb";
 
 
 const saltRounds = 10;
@@ -77,7 +78,7 @@ export const verifyToken = (token) => {
         if (err.name == 'TokenExpiredError') {
             return EXPIRED
         }
-        
+
         console.error('Token verification failed:', err);
         return null
     }
@@ -92,6 +93,33 @@ export const adminExists = async (email) => {
 
 export const lecturerExists = async (doc) => {
     let collection = await db.collection(COLLECTION_LECTURERS)
+    let result = await collection.findOne(doc)
+
+    return result !== null
+}
+
+export const getLecturer = async (id) => {
+    try {
+        const objectId = new ObjectId(id)
+        let collection = await db.collection(COLLECTION_LECTURERS)
+        let result = await collection.findOne({_id: objectId})
+        
+        if (result != null) {
+            return {
+                id: id,
+                name: result.fullname
+            }
+        }
+
+        return null
+    } catch(error) {
+        console.log("Error: ", error)
+        return null
+    }
+}
+
+export const courseExists = async (doc) => {
+    let collection = await db.collection(COLLECTION_COURSES)
     let result = await collection.findOne(doc)
 
     return result !== null

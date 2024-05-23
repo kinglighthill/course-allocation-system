@@ -22,7 +22,7 @@ app.use("/auth", auth);
 app.use("/admin", admin);
 app.use("/hods", hods);
 app.use("/lecturers", lecturers);
-app.use("/students", students);
+app.use("/", students);
 
 // Global error handling
 app.use((err, _req, res, next) => {

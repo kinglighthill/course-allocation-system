@@ -90,8 +90,8 @@ router.post("/lecturers", decodeToken, async (req, res) => {
             }
 
             const now = new Date();
-            lecturer.created_at = now;
-            lecturer.updated_at = now;
+            lecturer.created_at = now
+            lecturer.updated_at = now
 
             lecturerEmailSet.add(email)
             lecturerNameSet.add(name)
