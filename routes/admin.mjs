@@ -178,16 +178,16 @@ router.get("/lecturers/:id", decodeToken, async (req, res) => {
 
         let collection = await db.collection(COLLECTION_LECTURERS)
         
-        let result = await collection.find({_id: objectId})
+        let result = await collection.findOne({_id: objectId})
 
         if (!result.acknowledged) {
-            return reponseError(res, "failed to get lecturers", 400)
+            return reponseError(res, "failed to get lecturer", 400)
         }
   
         reponseSuccess(res, "successful", result)
     } catch(error) {
         console.log("Error: ", error)
-        reponseError(res, "failed to get lecturers")
+        reponseError(res, "failed to get lecturer")
     } 
 });
 
