@@ -141,6 +141,8 @@ router.get("/lecturers", decodeToken, async (req, res) => {
             return reponseError(res, "Invalid credentials!", 401)
         }
 
+        let collection = await db.collection(COLLECTION_LECTURERS)
+
         let result = await collection.find().limit(50).toArray()
 
         if (result == null) {
@@ -199,9 +201,23 @@ router.put("/lecturers/update", decodeToken, async (req, res) => {
             return reponseError(res, "Invalid credentials!", 401)
         }
 
-        let result = await collection.find()
+        let collection = await db.collection(COLLECTION_LECTURERS)
+
+        let result = await collection.find({password: undefined}).limit(50).toArray()
+
+        if (result == null) {
+            return reponseError(res, "lecturers not found", 404)
+        }
+
+        const lecturers = result.fi((lecturer) => {
+            delete lecturer.initial_password
+            delete lecturer.password
+
+            return lecturer
+        })
         
-        reponseSuccess(res, "successful", result)
+        await collection.updateMany({_id: objectId}, {$set: course})
+        reponseSuccess(res, "successful", lecturers)
     } catch(error) {
         console.log("Error: ", error)
         reponseError(res, "failed to add lecturers")
