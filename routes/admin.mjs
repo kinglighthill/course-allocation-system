@@ -203,7 +203,7 @@ router.put("/lecturers/update", decodeToken, async (req, res) => {
 
         let collection = await db.collection(COLLECTION_LECTURERS)
 
-        let result = await collection.find({password: undefined}).limit(50).toArray()
+        let result = await collection.find( { password : { $exists : false } } ).limit(50).toArray()
 
         if (result == null || result.length <= 0) {
             return reponseError(res, "lecturers not found", 404)
@@ -222,7 +222,7 @@ router.put("/lecturers/update", decodeToken, async (req, res) => {
         reponseSuccess(res, "successful", lecturers)
     } catch(error) {
         console.log("Error: ", error)
-        reponseError(res, "failed to add lecturers")
+        reponseError(res, "failed to update lecturers")
     } 
 });
 
