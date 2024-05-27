@@ -141,18 +141,23 @@ router.get("/lecturers", decodeToken, async (req, res) => {
             return reponseError(res, "Invalid credentials!", 401)
         }
 
-        let collection = await db.collection(COLLECTION_LECTURERS)
-        
-        let result = await collection.find()
+        let result = await collection.find().limit(50).toArray()
 
-        if (!result.acknowledged) {
-            return reponseError(res, "failed to add lecturers", 400)
+        if (result == null) {
+            return reponseError(res, "lecturers not found", 404)
         }
+
+        const lecturers = result.map((lecturer) => {
+            delete lecturer.initial_password
+            delete lecturer.password
+
+            return lecturer
+        })
   
-        reponseSuccess(res, "successful", result)
+        reponseSuccess(res, "successful", lecturers)
     } catch(error) {
         console.log("Error: ", error)
-        reponseError(res, "failed to add lecturers")
+        reponseError(res, "failed to get lecturers")
     } 
 });
 
@@ -174,13 +179,13 @@ router.get("/lecturers/:id", decodeToken, async (req, res) => {
         let result = await collection.find({_id: objectId})
 
         if (!result.acknowledged) {
-            return reponseError(res, "failed to add lecturers", 400)
+            return reponseError(res, "failed to get lecturers", 400)
         }
   
         reponseSuccess(res, "successful", result)
     } catch(error) {
         console.log("Error: ", error)
-        reponseError(res, "failed to add lecturers")
+        reponseError(res, "failed to get lecturers")
     } 
 });
 
@@ -195,8 +200,6 @@ router.put("/lecturers/update", decodeToken, async (req, res) => {
         }
 
         let result = await collection.find()
-
-  
         
         reponseSuccess(res, "successful", result)
     } catch(error) {
