@@ -97,8 +97,20 @@ router.post("/lecturers", decodeToken, async (req, res) => {
             lecturerNameSet.add(name)
             processedLecturers.push(lecturer)
 
-            delete lecturer.password
-            processedLecturersMinified.push(lecturer)
+            processedLecturersMinified.push({
+                "title": lecturer.title,
+                "fullname": lecturer.fullname,
+                "department": lecturer.department,
+                "designation": lecturer.designation,
+                "phone_number": lecturer.phone_number,
+                "email": lecturer.email,
+                "type": lecturer.type,
+                "initial_password": lecturer.initial_password,
+                "updated_password": lecturer.updated_password,
+                "created_at": lecturer.created_at,
+                "updated_at": lecturer.updated_at,
+                "_id": lecturer._id
+            })
         }
         
         let result = await collection.insertMany(processedLecturers)
