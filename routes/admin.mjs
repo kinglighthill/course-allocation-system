@@ -205,18 +205,20 @@ router.put("/lecturers/update", decodeToken, async (req, res) => {
 
         let result = await collection.find({password: undefined}).limit(50).toArray()
 
-        if (result == null) {
+        if (result == null || result.length <= 0) {
             return reponseError(res, "lecturers not found", 404)
         }
 
-        const lecturers = result.fi((lecturer) => {
-            delete lecturer.initial_password
-            delete lecturer.password
-
-            return lecturer
-        })
+        const lecturers = []
         
-        await collection.updateMany({_id: objectId}, {$set: course})
+        for (let i = 0; i < result.length; i++) {
+            const lecturer = result[i]
+            lecturer.password = await hashPassword(lecturer.initial_password)
+
+            lecturers.push(lecturer)
+        }
+
+        await collection.insertMany(lecturers)
         reponseSuccess(res, "successful", lecturers)
     } catch(error) {
         console.log("Error: ", error)
