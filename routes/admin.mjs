@@ -150,7 +150,6 @@ router.get("/lecturers", decodeToken, async (req, res) => {
         }
 
         const lecturers = result.map((lecturer) => {
-            delete lecturer.initial_password
             delete lecturer.password
 
             return lecturer
@@ -183,6 +182,8 @@ router.get("/lecturers/:id", decodeToken, async (req, res) => {
         if (result == null) {
             return reponseError(res, "failed to get lecturer", 400)
         }
+
+        delete result.password
   
         reponseSuccess(res, "successful", result)
     } catch(error) {
