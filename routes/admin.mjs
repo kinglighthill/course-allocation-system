@@ -215,10 +215,10 @@ router.put("/lecturers/update", decodeToken, async (req, res) => {
             const lecturer = result[i]
             lecturer.password = await hashPassword(lecturer.initial_password)
 
-            lecturers.push(lecturer)
+            let result = await collection.updateOne({_id: new ObjectId(lecturer._id)}, {$set: lecturer})
+            lecturers.push(result)
         }
 
-        await collection.updateMany(lecturers)
         reponseSuccess(res, "successful", lecturers)
     } catch(error) {
         console.log("Error: ", error)
