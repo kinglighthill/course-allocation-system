@@ -181,6 +181,7 @@ router.get("/lecturers/:id", decodeToken, async (req, res) => {
         let result = await collection.findOne({_id: objectId})
 
         if (!result.acknowledged) {
+            console.log("Result: ", result)
             return reponseError(res, "failed to get lecturer", 400)
         }
   
@@ -188,42 +189,7 @@ router.get("/lecturers/:id", decodeToken, async (req, res) => {
     } catch(error) {
         console.log("Error: ", error)
         reponseError(res, "failed to get lecturer")
-    } 
-});
-
-router.put("/lecturers/update", decodeToken, async (req, res) => {
-    try {
-        const { email } = res.locals.decoded_token
-
-        const adminAvailable = await adminExists(email)
-
-        if (!adminAvailable) {
-            return reponseError(res, "Invalid credentials!", 401)
-        }
-
-        let collection = await db.collection(COLLECTION_LECTURERS)
-
-        let result = await collection.find( { password : { $exists : false } } ).limit(50).toArray()
-
-        if (result == null || result.length <= 0) {
-            return reponseError(res, "lecturers not found", 404)
-        }
-
-        const lecturers = []
-        
-        for (let i = 0; i < result.length; i++) {
-            const lecturer = result[i]
-            lecturer.password = await hashPassword(lecturer.initial_password)
-
-            let resultL = await collection.updateOne({_id: new ObjectId(lecturer._id)}, {$set: lecturer})
-            lecturers.push(resultL)
-        }
-
-        reponseSuccess(res, "successful", lecturers)
-    } catch(error) {
-        console.log("Error: ", error)
-        reponseError(res, "failed to update lecturers")
-    } 
+    }
 });
 
 export default router;
