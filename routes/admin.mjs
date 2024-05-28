@@ -180,9 +180,7 @@ router.get("/lecturers/:id", decodeToken, async (req, res) => {
         
         let result = await collection.findOne({_id: objectId})
 
-        if (!result.acknowledged) {
-            console.log("Id: ", id)
-            console.log("Result: ", result)
+        if (result == null) {
             return reponseError(res, "failed to get lecturer", 400)
         }
   
