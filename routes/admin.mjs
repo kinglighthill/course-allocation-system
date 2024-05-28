@@ -218,7 +218,7 @@ router.put("/lecturers/update", decodeToken, async (req, res) => {
             lecturers.push(lecturer)
         }
 
-        await collection.insertMany(lecturers)
+        await collection.updateMany(lecturers)
         reponseSuccess(res, "successful", lecturers)
     } catch(error) {
         console.log("Error: ", error)
