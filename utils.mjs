@@ -6,6 +6,7 @@ import "./loadEnvironment.mjs";
 
 import { COLLECTION_ADMINS, COLLECTION_COURSES, COLLECTION_LECTURERS, EXPIRED } from "./constants.mjs";
 import { ObjectId } from "mongodb";
+import { title } from "process";
 
 
 const saltRounds = 10;
@@ -107,7 +108,10 @@ export const getLecturer = async (id) => {
         if (result != null) {
             return {
                 id: id,
-                name: result.fullname
+                name: result.fullname,
+                title: result.title,
+                designation: result.designation,
+                department: result.department
             }
         }
 
