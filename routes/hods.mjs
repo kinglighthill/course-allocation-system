@@ -220,7 +220,11 @@ router.post("/courses/allocate", decodeToken, isAuthorized, async (req, res) => 
 
         let collection = await db.collection(COLLECTION_COURSES)
 
+
         const id = allocation.course_id
+
+        console.log("Allocation: ", allocation)
+        console.log("Course id: ", id)
 
         const objectId = new ObjectId(id)
 
