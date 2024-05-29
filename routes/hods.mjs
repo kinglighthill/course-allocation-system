@@ -223,9 +223,6 @@ router.post("/courses/allocate", decodeToken, isAuthorized, async (req, res) => 
 
         const id = allocation.course_id
 
-        console.log("Allocation: ", allocation)
-        console.log("Course id: ", id)
-
         const objectId = new ObjectId(id)
 
         const courseAvailable = await courseExists({_id: objectId})
